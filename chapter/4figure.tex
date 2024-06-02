@@ -1,0 +1,69 @@
+% !TEX root = ../latexnote.tex
+\chapter{图片}\label{chap:figure}
+\section{简述}\label{sec:figure-intro}
+\LaTeX{} 本身不支持插图功能，需要借助graphicx宏包。
+
+使用 latex + dvipdfmx 编译命令时，调用 graphicx 宏包时要指定 dvipdfmx 选项\footnote{早期常使用 latex + dvips 组合命令，后者将 .dvi 文件转为 .ps 文件（PostScript），可进一步通过 ps2pdf 工具生成 PDF。dvips 和 dvipdfmx 在图形、颜色、超链接等功能的实现上有差别，而 \LaTeX{} 无法识别用户是用 dvips 还是dvipdfmx，所以要指定选项（缺省为 dvips）。}；而使用 pdflatex 或 xelatex 命令编译时不需要。
+
+下表给出了不同编译命令支持的图片格式：
+
+\begin{table}[htp]
+    \centering
+    \caption{各种编译方式支持的主流图片格式}\label{tbl:figure-format}
+    \begin{tabular}{*{3}{l}}
+        \hline
+        \textbf{格式}              & \textbf{矢量图} & \textbf{位图}      \\
+        \hline
+        {latex + dvipdfmx}       & {.eps}       & N/A              \\
+        \quad （调用 {bmpsize} 宏包 ） & {.eps .pdf}  & {.jpg .png .bmp} \\[.3\baselineskip]
+        {pdflatex}               & {.pdf}       & {.jpg .png}      \\
+        \quad （调用 {epstopdf} 宏包） & {.pdf .eps}  & {.jpg .png}      \\[.3\baselineskip]
+        {xelatex}                & {.pdf .eps}  & {.jpg .png .bmp} \\
+        \hline
+    \end{tabular}
+    \begin{quote}\footnotesize
+        注：在较新的 \TeX{} 发行版中，{latex + dvipdfmx} 和 {pdf\-latex} 命令可不依赖宏包，支持原来需要宏包扩展的图片格式
+        （但 {pdf\-latex} 命令仍不支持 {.bmp} 格式的位图）。
+    \end{quote}
+\end{table}
+
+引入graphicx 宏包后，可使用 \lstinline|\includegraphics| 命令插入图片，其语法为：
+
+
+\begin{lstlisting}
+\includegraphics[options]{file} % options可指定图片属性，如width=
+\end{lstlisting}
+
+
+其中，options 可选参数有：
+
+\begin{table}[htp]
+    \centering
+    \caption{ \lstinline{\includegraphics} 命令的可选参数}\label{tbl:graphics-options}
+    \begin{tabular}{lp{18em}}
+        \hline
+        \textbf{参数}     & \textbf{含义}          \\
+        \hline
+        width={width}   & 将图片缩放到宽度为{width}     \\
+        height={height} & 将图片缩放到高度为{height}    \\
+        scale={scale}   & 将图片相对于原尺寸缩放{scale} 倍 \\
+        angle={angle}   & 将图片逆时针旋转{angle} 度    \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\section{浮动体}\label{sec:figure-float}
+
+浮动体将图、表与其标题定义为整体，然后动态排版，以解决图、表卡在换页处造成的过长的垂直空白的问题。图片的浮动体是figure。
+
+下面是一个例子：
+\begin{lstlisting}
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.8\textwidth]{example-image}
+    \caption{This is an example image.}
+    \label{fig:example-image}
+\end{figure}
+\end{lstlisting}
+
+参数htbp表示浮动体的位置，h表示插入此处、t表示在页面上端，b表示在页面下端、p表示允许浮动体单开一页。

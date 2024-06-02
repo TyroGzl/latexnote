@@ -1,0 +1,131 @@
+% !TEX root = ../latexnote.tex
+\chapter{版面和格式}\label{chap:format}
+
+
+
+\section{字体设置}\label{sec:font}
+\subsection{使用中文}\label{subsec:chinese}
+使用中文需要导入ctex宏包。
+\begin{lstlisting}
+\usepackage{ctex}
+\end{lstlisting}
+
+\subsection{全局字体设置}\label{subsec:global}
+
+\begin{lstlisting}
+  \setmainfont{Times New Roman}	%仅对西文起作用，需要fontspec宏包
+  \setCJKmainfont{SimSun}			%仅对中文起作用
+\end{lstlisting}
+
+\subsection{局部字体设置}\label{subsec:local}
+
+\begin{lstlisting}
+  \setCJKfamilyfont{zhsong}{FZShuSong-Z01}
+  \newcommand*{\songti}{\CJKfamily{zhsong}}
+\end{lstlisting}
+
+可以使用\lstinline{\songti}命令来调用宋体字体。
+
+\subsection{文字装饰}\label{subsec:decor}
+
+\LaTeX{} 提供\lstinline{\underline}命令设置下划线。
+
+\begin{codeshow}
+  \underline{underlined text}
+\end{codeshow}
+
+\lstinline{\underline}命令提供的下划线样式不够灵活，ulem或CJKfntef宏包提供了更灵活的下划线命令，CJKfntef宏包对中文支持更好。
+
+\begin{codeshow}
+  \CJKunderdot{important 非常重要}\\
+  \CJKunderline{notice 注意}\\
+  \CJKunderdblline{urgent 必须}\\
+  \CJKunderwave{prompt 提示}\\
+  \CJKsout{wrong 错误}\\
+  \CJKxout{removed 删除}
+\end{codeshow}
+
+\section{分栏}\label{sec:columns}
+
+\LaTeX{} 支持简单的单栏或双栏排版。标准文档类的全局选项 onecolumn、twocolumn 可控制全文分单栏或双栏排版。LATEX 也提供了切换单/双栏排版的命令：
+
+\begin{lstlisting}
+\onecolumn
+\twocolumn
+\end{lstlisting}
+
+切换单/双栏排版时总是会另起一页（\lstinline{\clearpage}）。在双栏模式下使用 \lstinline{\newpage} 会换栏而不是换页；\lstinline{\clearpage} 则能够换页。
+
+使用multicol宏包可以实现多栏排版。并且切换不会另起一页。
+
+\begin{lstlisting}
+\usepackage{multicol}
+\begin{multicols}{2}
+  ...
+\end{multicols}
+\end{lstlisting}
+
+\section{断行、断页、断词}\label{sec:break}
+
+\begin{lstlisting}
+\\[length] % \\可以带可选参数length，用于在断行处添加垂直间距，可以在表格公式等地方使用
+\newline %不带可选参数，只能用于文本段落中
+
+\newpage %双栏模式下另起一栏，单栏模式下另起一页
+\clearpage %单栏、双栏模式下都另起一页
+\end{lstlisting}
+
+如果 \LaTeX{} 遇到了很长的英文单词，仅在单词之间的“空格”处断行无法生成疏密程度匀称的段落时，就会考虑从单词中间断开。对于绝大多数单词，\LaTeX{} 能够找到合适的断词位置，在断开的行尾加上连字符\lstinline{-}。如果一些单词没能自动断词，我们可以在单词内手动使用 \lstinline{\-} 命令指定断词的位置：
+
+\begin{codeshow}
+  I think this is: su\-per\-cal\-%
+  i\-frag\-i\-lis\-tic\-ex\-pi\-%
+  al\-i\-do\-ciousu\-per\-cal\-%
+  i\-frag\-i\-lis\-tic\.
+\end{codeshow}
+
+\section{空格和分段}\label{sec:space}
+\LaTeX{} 源代码中，空格键和 Tab 键输入的空白字符视为“空格”。连续的若干个空白字符视为一个空格。一行开头的空格忽略不计。
+
+行末的换行符视为一个空格；但连续两个换行符，也就是空行，会将文字分段。多个空行被视为一个空行。也可以在行末使用 \lstinline{\par} 命令分段。
+
+\begin{codeshow}
+  This is a new paragraph. Text text text
+  text text   text text text text text text.
+
+  This is a new paragraph.\par
+  This is a new paragraph.
+\end{codeshow}
+
+\section{注释}\label{sec:comment}
+LATEX 用 \% 字符作为注释。在这个字符之后直到行末，所有的字符都被忽略，行末的换行符也不引入空格。
+
+\begin{codeshow}
+  This is an % short comment
+  % ---
+  % Long and organized
+  % comments
+  % ---
+  example: Comments do not bre%
+  ak a word.
+\end{codeshow}
+
+\section{特殊字符}\label{sec:special}
+
+以下字符在 LATEX 里有特殊用途，如 \% 表示注释，\$、\^{}、\_ 等用于排版数学公式，\& 用于排版表格，等等。直接输入这些字符得不到对应的符号，还往往会出错：
+
+\begin{lstlisting}
+  # $ % & { } _ ^ ~ \
+\end{lstlisting}
+
+如果想要输入以上符号，需要使用以下带反斜线的形式输入，类似编程语言里的“转义”符号：
+\begin{lstlisting}
+  \# \$ \% \& \{ \} \_
+  \^{} \~{} \textbackslash
+\end{lstlisting}
+
+\section{问题}\label{sec:qa}
+\subsection{双面空白页}\label{subsec:blankpage}
+\qaq{问题：}采用\lstinline{twoside}文档类，使用\lstinline{\cleardoublepage}设置双面空白页，如何去除空白页？
+
+\qaq{解决方法：}在所有\lstinline{\cleardoublepage}之前添加\lstinline{\let\cleardoublepage\clearpage}。

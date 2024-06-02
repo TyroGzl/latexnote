@@ -1,0 +1,101 @@
+\documentclass[lang=cn,newtx,10pt,scheme=chinese]{elegantbook}
+
+\title{\LaTeX{} 随笔}
+\subtitle{Elegant\LaTeX{} 入门之作}
+
+\author{SummerSong}
+% \institute{}
+\renewcommand{\today}{\number\year 年 \number\month 月 \number\day 日}
+\date{\today}
+% \version{4.5}
+% \bioinfo{自定义}{信息}
+
+% \extrainfo{注意：本模板自 2023 年 1 月 1 日开始，不再更新和维护！}
+
+\setcounter{tocdepth}{3}
+
+\logo{logo-blue.png}
+\cover{cover.jpg}
+
+% 本文档命令
+\usepackage{array}
+\newcommand{\ccr}[1]{\makecell{{\color{#1}\rule{1cm}{1cm}}}}
+
+% 修改标题页的橙色带
+\definecolor{customcolor}{RGB}{32,178,170}
+\colorlet{coverlinecolor}{customcolor}
+\usepackage{cprotect}
+
+% 自定义qaq命令
+\newcommand{\qaq}[1]{\textcolor{red}{\kaishu\large #1}}
+% 代码左右展示
+\usepackage{array,tabularx}
+\usepackage{verbatim}
+\usepackage{xeCJKfntef}
+\newbox\savedlines
+\newtoks\savedtokens
+\makeatletter
+\def\codeshow{%
+\global\savedtokens={}%
+\def\verbatim@processline{%
+  {\setbox0=\hbox{\the\verbatim@line}%
+      \hsize=\wd0
+      \the\verbatim@line\par}%
+  \global\savedtokens=\expandafter{\the\expandafter\savedtokens\the\verbatim@line^^J}}%
+\@tempswatrue
+\setbox0=\vbox\bgroup\parskip=0pt\topsep=0pt\partopsep=0pt
+\verbatim}
+\def\endcodeshow{\endverbatim%
+  \unskip\setbox0=\lastbox\egroup
+  \global\setbox\savedlines=\box0
+  \addvspace{1em}\par\noindent%
+  \colorbox{lightgray}{%
+    \begin{minipage}{.55\textwidth}{\usebox\savedlines}\end{minipage}}%
+  \hfill\fbox{\parbox{.40\textwidth}%
+    {\scantokens\expandafter{\the\savedtokens\unskip\endinput}}}%
+  \par\addvspace{1em}}
+\makeatother
+
+% 完全引用
+\usepackage{cleveref}
+
+% 定义交叉引用格式
+\newcommand*{\fullref}[1]{第 \ref{#1} \namecref{#1} \nameref{#1} }
+\crefname{theorem}{定理}{定理}
+\crefname{lemma}{引理}{引理}
+\crefname{definition}{定义}{定义}
+\crefname{figure}{图}{图}
+\crefname{table}{表}{表}
+\crefname{algorithm}{算法}{算法}
+\crefname{chapter}{章}{章}
+\crefname{section}{节}{节}
+\crefname{subsection}{条}{条}
+
+
+\begin{document}
+
+\maketitle
+\frontmatter
+\tableofcontents
+\mainmatter
+
+%正文
+\input{chapter/0log.tex}
+
+\input{chapter/1basic.tex}
+\input{chapter/2format.tex}
+\input{chapter/3text.tex}
+\input{chapter/4figure.tex}
+\input{chapter/5table.tex}
+\input{chapter/6math.tex}
+\input{chapter/7ref.tex}
+\input{chapter/8draw.tex}
+
+\input{chapter/0ref.tex}
+
+% \printbibliography[heading=bibintoc, title=\ebibname]
+
+%附录
+\appendix
+
+\end{document}
