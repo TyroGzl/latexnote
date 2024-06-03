@@ -155,6 +155,18 @@
 \pagestyle{myfancy}
 \end{lstlisting}
 
+\subsection{\lstinline{pifont}宏包触发页脚中文不显示}\label{subsec:pifontconflict}
+\qaq{问题：}使用\lstinline{pifont}宏包中的\lstinline{\ding}命令，页脚中文不显示。
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=\textwidth]{figure/chap-text/pifontconflict.png}
+    \caption{页脚中文不显示}
+\end{figure}
+
+\qaq{解决方法：}参考\href{https://github.com/CTeX-org/ctex-kit/issues/688}{pifont宏包可能会触发中文不显示}，把\lstinline{\makexeCJKactive}加到页眉页脚的开头。
+\begin{lstlisting}
+    \fancyfoot[C]{  \songti 第\thepage 页  \hspace{0.5em} 共\pageref{LastPage}页}
+\end{lstlisting}
 
 \section{脚注}\label{sec:footnote}
 
@@ -256,4 +268,3 @@
 行内可以使用\lstinline{\verb|内容|}。
 
 也可以使用\lstinline{lstlisting}宏包。可以实现复杂的高亮效果，但需要额外的配置。
-

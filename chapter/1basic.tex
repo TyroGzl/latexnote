@@ -51,6 +51,23 @@
 \section{\LaTeX{} 安装}\label{sec:latexinstall}
 参考\href{https://summersong.top/post/1f879cd9.html}{TexLive+VScode+SumatraPDF配置LaTex编辑环境}
 
+\subsection{用户名为中文安装Texlive失败}\label{subsec:texlive_cn_username}
+\qaq{问题：}在使用 GUI 界面安装时, 出现的错误形如图\ref{fig:failuregui}
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figure/chap-basic/failuregui.jpg}
+    \caption{Texlive 安装错误}\label{fig:failuregui}
+\end{figure}
+
+\qaq{解决方法：}参考\href{https://syvshc.github.io/2021-04-07-illegal-temp-cause-tlinstall-failure/}{Windows 不合法的缓存路径导致 TeX Live 安装失败}，建议临时修改\lstinline{TEMP}与\lstinline{TMP}环境变量的值。在cmd中输入以下命令：
+\begin{lstlisting}
+    mkdir C:\temp
+    set TEMP=C:\temp
+    set TMP=C:\temp
+\end{lstlisting}
+
+然后运行安装脚本。
+
 \section{\LaTeX{} 命令和代码结构}\label{sec:latexstructure}
 \subsection{最短的\LaTeX{}代码}\label{subsec:shortlatexcode}
 \begin{lstlisting}
@@ -198,20 +215,3 @@ LATEX 还提供了一个 \lstinline{\includeonly} 命令来组织文件，用于
 \includeonly{chapter1,chapter3}
 \end{lstlisting}
 
-\section{问题}
-\subsection{用户名为中文安装Texlive失败}\label{subsec:texlive_cn_username}
-\qaq{问题：}在使用 GUI 界面安装时, 出现的错误形如图\ref{fig:failuregui}
-\begin{figure}[!h]
-    \centering
-    \includegraphics[width=0.8\textwidth]{figure/chap-basic/failuregui.jpg}
-    \caption{Texlive 安装错误}\label{fig:failuregui}
-\end{figure}
-
-\qaq{解决方法：}参考\href{https://syvshc.github.io/2021-04-07-illegal-temp-cause-tlinstall-failure/}{Windows 不合法的缓存路径导致 TeX Live 安装失败}，建议临时修改\lstinline{TEMP}与\lstinline{TMP}环境变量的值。在cmd中输入以下命令：
-\begin{lstlisting}
-    mkdir C:\temp
-    set TEMP=C:\temp
-    set TMP=C:\temp
-\end{lstlisting}
-
-然后运行安装脚本。
