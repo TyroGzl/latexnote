@@ -267,4 +267,35 @@
 
 行内可以使用\lstinline{\verb|内容|}。
 
+\subsection{lstlisting宏包}\label{subsec:lstlistings}
+
 也可以使用\lstinline{lstlisting}宏包。可以实现复杂的高亮效果，但需要额外的配置。
+
+添加标题：
+\begin{verbatim}
+\begin{lstlisting}[caption=代码标题]
+    代码内容
+\end{lstlisting}
+\end{verbatim}
+
+设置标题位置，在导言区配置
+\begin{lstlisting}
+\usepackage{listings}
+\lstset{captionpos=b} % 标题位置在下方,t为上方
+\end{lstlisting}
+
+可以设置标签：
+\begin{lstlisting}
+    \renewcommand\lstlistingname{\figurename}
+\end{lstlisting}
+
+设置代码环境计数器与图计数器保持一致：
+\begin{lstlisting}
+\makeatletter
+\AtBeginDocument{%
+  \let\c@figure\c@lstlisting
+  \let\thefigure\thelstlisting
+  \let\ftype@lstlisting\ftype@figure % give the floats the same precedence
+}
+\makeatother
+\end{lstlisting}
