@@ -191,3 +191,20 @@ tabularx 宏包为我们提供了方便的解决方案。它引入了一个 X �
     \item 注释掉\lstinline|\usepackage{arydshln}|。
     \item 将\lstinline|\usepackage{arydshln}|放于\lstinline|\usepackage{longtable}|之后
 \end{enumerate}
+
+\subsection{cline命令 undefined control sequence报错}\label{subsec:cline-undefined-control-sequence-error}
+\qaq{问题：}使用Springer模板制作表格，使用\lstinline{\cline}命令报错，提示\lstinline{undefined control sequence}。
+
+\qaq{解决方法：}Springer模板重新定义了\lstinline{\cline}命令，找到Springer模板的\lstinline{sn-jnl.cls}文件，将下面一行注释掉：
+\begin{lstlisting}
+    \let\cline\cmidrule
+\end{lstlisting}
+
+\subsection{multirow宏包居中}\label{subsec:multirow-center}
+
+\qaq{问题：}列格式设置为居中，但是使用multirow多行合并内容不会居中
+
+\qaq{解决方法：}添加如下命令：
+\begin{lstlisting}
+\renewcommand{\multirowsetup}{\centering}
+\end{lstlisting}
