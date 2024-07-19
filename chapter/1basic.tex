@@ -68,8 +68,32 @@
 
 然后运行安装脚本。
 
+\subsection{报错：`vars' expected but `powershell'}\label{subsec:varexpected}
+\qaq{问题：}安装texlive过程报错，提示\lstinline{'var' expected but 'powershell'}不是内部或外部的命令，如图\ref{fig:varexpected}所示。
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figure/chap-basic/varexpected.png}
+    \caption{Texlive 安装错误}
+    \label{fig:varexpected}
+\end{figure}
+
+\qaq{解决方法：}参考\href{https://blog.csdn.net/qq_50698753/article/details/130475564}{texlive安装过程中报错 vars expected but powershell}，添加如下内容到系统PATH路径中：
+\begin{lstlisting}
+    %SystemRoot%\System32
+    %SystemRoot%
+    %SystemRoot%\System32\Wben
+    %SystemRoot%\System32\WindowsPowerShell\v1.0
+\end{lstlisting}
+
+
+
+
+
+
+
 \section{\LaTeX{} 命令和代码结构}\label{sec:latexstructure}
 \subsection{最短的\LaTeX{}代码}\label{subsec:shortlatexcode}
+
 \begin{lstlisting}
 \documentclass{article}
 \begin{document}

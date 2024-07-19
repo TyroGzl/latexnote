@@ -262,10 +262,10 @@
   \let\Bbbk\relax
   \RequirePackage{esint}
   %%% use yhmath pkg, uncomment following code
-  % \let\oldwidering\widering
-  % \let\widering\undefined
-  % \RequirePackage{yhmath}
-  % \let\widering\oldwidering
+  \let\oldwidering\widering
+  \let\widering\undefined
+  \RequirePackage{yhmath}
+  \let\widering\oldwidering
 
   %%% use esvect pkg, uncomment following code
   % \RequirePackage{esvect}
