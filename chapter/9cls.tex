@@ -1,0 +1,155 @@
+\chapter{类的编写}\label{chap:cls}
+
+\section{文档类和宏包的结构}\label{sec:cls-struct}
+文档类或宏包文件的大纲如下：
+\begin{itemize}
+    \item \textbf{标识} 文件声明自己是一个 LATEX2ε 宏包或文档类，并简要描述自身。
+    \item \textbf{初步声明} 在这里，文件声明一些命令，并可以加载其他文件。通常，这些命令将只是声明所用选项中需要的代码。
+    \item \textbf{选项} 文件声明并处理其选项。
+    \item \textbf{更多声明} 这是文件执行大部分工作的地方：声明新变量、命令和字体；以及加载其他文件。
+\end{itemize}
+
+\subsection{标识}\label{subsec:cls-id}
+文档类或宏包文件的第一件事是标识自己。文档类文件的标识如下：
+\begin{lstlisting}
+    \NeedsTeXFormat{LaTeX2e}
+    \ProvidesClass{myclass}[2019/01/01 v1.0 My Class]
+\end{lstlisting}
+
+\subsection{使用类和宏包}\label{subsec:cls-use}
+一个 LaTex 宏包或文档类可以加载另一个宏包，方法如下：
+\begin{lstlisting}
+    \RequirePackage[options]{otherpackage}[date]
+\end{lstlisting}
+
+一个 LATEX 文档类可以加载另一个类，方法如下：
+\begin{lstlisting}
+    \LoadClass[options]{otherclass}[date]
+\end{lstlisting}
+
+以下命令可以在常见情况下使用，即您希望简单地加载一个具有当前类所使用的确切选项的类或宏包文件。
+\begin{lstlisting}
+    \LoadClassWithOptions{<class-name>}[<date>]
+    \RequirePackageWithOptions{<package>}[<date>]
+\end{lstlisting}
+
+\subsection{声明选项}\label{subsec:cls-decl-opt}
+宏包和文档类可以声明选项，作者可以指定这些选项；例如，twocolumn 选项由 article 类声明。注意，选项的名称应仅包含“LATEX 名称”中允许的字符；特别地，不能包含任何控制序列。
+
+LATEX 支持两种创建选项的方法：键-值系统和“简单文本”方式。键-值系统推荐用于新的类和宏包，并且在处理选项类方面比简单文本方式更灵活。这两种选项方法在 LATEX 源文件中使用相同的基本结构：首先声明选项，然后在第二步处理选项。两者都允许将选项传递给其他宏包或底层类。
+
+\subsubsection{简单文本方式}\label{subsubsec:cls-decl-opt-simple}
+声明一个选项如下：
+\begin{lstlisting}
+    \DeclareOption{<option>}{<code>}
+\end{lstlisting}
+
+例如，graphics 宏包中的 dvips 选项（略作简化）的实现如下：
+\begin{lstlisting}
+    \DeclareOption{dvips}{\input{dvips.def}}
+\end{lstlisting}
+
+这意味着当作者写 \lstinline|\usepackage[dvips]{graphics}| 时，文件 dvips.def 会被加载。
+
+再举个例子，article 类中声明了 a4paper 选项以设置 \lstinline|\paperheight| 和 \lstinline|\paperwidth| 长度：
+\begin{lstlisting}
+    \DeclareOption{a4paper}{%
+        \setlength{\paperheight}{297mm}%
+        \setlength{\paperwidth}{210mm}%
+    }
+\end{lstlisting}
+
+有时用户会请求类或宏包未明确声明的选项。\textbf{默认情况下，这将产生警告（对于类）或错误（对于宏包）}；此行为可以通过以下方式更改：
+\begin{lstlisting}
+    \DeclareOption*{<code>}
+\end{lstlisting}
+
+例如，为使宏包 fred 对未知选项产生警告而不是错误，您可以指定：
+\begin{lstlisting}
+    \DeclareOption*{%
+        \PackageWarning{fred}{Unknown option `\CurrentOption'}%
+    }
+\end{lstlisting}
+这样，如果作者写了 \lstinline|\usepackage[foo]{fred}|，他们会收到警告 Package fred Warning: Unknown option `foo'.
+
+\begin{explain*}{}
+    *表示所有字符匹配？
+\end{explain*}
+
+可以使用 \lstinline|\PassOptionsToPackage| 或 \lstinline|\PassOptionsToClass| 命令将选项传递给另一个宏包或类（请注意，这是一种专门的操作，仅适用于选项名称）,例如，要将每个未知选项传递给 article 类，可以使用：
+\begin{lstlisting}
+    \DeclareOption*{%
+        \PassOptionsToClass{\CurrentOption}{article}%
+    }
+\end{lstlisting}
+
+\textbf{如果这样做，您应该确保在稍后某个时刻加载该类，否则选项将永远不会被处理！}
+
+到目前为止，我们只解释了如何声明选项，而不是如何执行它们。要处理文件调用时使用的选项，应使用：
+\begin{lstlisting}
+    \ProcessOptions\relax
+\end{lstlisting}
+
+
+
+
+\subsubsection{键-值系统}\label{subsubsec:cls-decl-opt-kv}
+
+\section{一个最小的文档类文件}\label{sec:cls-minimal}
+一个文档类或宏包的大部分工作在于定义新命令或更改文档的外观。这是在文档类的主体中完成的，使用诸如 \lstinline|\newcommand| 或 \lstinline|\setlength| 等命令。
+
+每个文档类文件必须包含四个内容：定义 \lstinline|\normalsize|、设置 \lstinline|\textwidth| 和 \lstinline|\textheight| 的值，以及指定页码。因此，一个最小的文档类文件\footnote{这个类现在已经在标准发行版中，名为 minimal.cls。} 看起来像这样：
+\begin{lstlisting}
+    \NeedsTeXFormat{LaTeX2e}
+    \ProvidesClass{minimal}[2022-06-01 Standard LaTeX minimal class]
+    \renewcommand{\normalsize}{\fontsize{10pt}{12pt}\selectfont}
+    \setlength{\textwidth}{6.5in}
+    \setlength{\textheight}{8in}
+    \pagenumbering{arabic}    % 即使这个类不显示页码也需要
+\end{lstlisting}
+
+然而，这个类文件不支持脚注、边注、浮动对象等，也不提供像 \lstinline|\rm| 这样的两个字母的字体命令；因此，大多数文档类会包含比这更多的内容！
+
+\subsection{示例：一个新闻简报类}\label{subsec:cls-news}
+\begin{lstlisting}
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesClass{smplnews}[2024-10-23 The eimple Newsletter class]
+
+\newcommand{\headlinecolor}{\normalcolor}
+
+% 将大多数指定的选项传递给 article 类：除了 onecolumn 选项被关闭，green选项将标题设置为绿色
+\DeclareOption{onecolumn}{\OptionNotUsed}
+\DeclareOption{green}{\renewcommand{\headlinecolor}{\color{green}}}
+
+\DeclareOption*{\PassOptionsToClass{\CurrentOption}{article}}
+
+\ProcessOptions\relax
+
+% 然后加载 article 类，使用 twocolumn 选项。
+\LoadClass[twocolumn]{article}
+
+% 由于新闻简报将以彩色打印，它现在加载 color 宏包。该类不指定设备驱动程序选项，因为这应由 smplnews 类的使用者指定。
+\RequirePackage{color}
+
+% 重新定义 \maketitle，以 72 pt Helvetica 粗斜体显示标题，使用合适的颜色。
+\renewcommand{\maketitle}{%
+    \twocolumn[
+        \fontsize{72}{80}\fontfamily{phv}\fontseries{b}
+        \fontshape{sl}\selectfont\headlinecolor
+        \@title
+    ]
+}
+
+% 重新定义 \section 并关闭章节编号
+\renewcommand{\section}{
+    \@startsection{section}{1}{0pt}{-1.5ex plus -1ex minus -.2ex}
+    {1ex plus .2ex}{\large\sffamily\slshape\headlinecolor}
+}
+
+\setcounter{secnumdepth}{0}
+
+% 设置了三个基本要素
+\renewcommand{\normalsize}{\fontsize{9}{10}\selectfont}
+\setlength{\textwidth}{17.5cm}
+\setlength{\textheight}{20cm}
+\end{lstlisting}
