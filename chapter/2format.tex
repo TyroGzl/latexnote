@@ -4,6 +4,54 @@
 
 
 \section{字体设置}\label{sec:font}
+
+\subsection{字体族}
+LaTeX 默认预定义的三种字体族为：罗马字体族，无衬线字体族，打字机字体族。有两种命令可以局部使用这些字体族：
+\begin{table}[!h]
+  \centering
+  \begin{tabular}{ccc}
+    \toprule
+    字体族 & 带参数命令                  & 声明命令                  \\
+    \midrule
+    罗马  & \lstinline|\textrm{ }| & \lstinline|\rmfamily| \\
+    无衬线 & \lstinline|\textsf{ }| & \lstinline|\sffamily| \\
+    打字机 & \lstinline|\texttt{ }| & \lstinline|\ttfamily| \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+但是对于中文，没有太多的变体，因此，我们一般使用字体族来区分（宋体，隶书等）。
+
+\begin{explain*}{}
+  因此，中文字体的选择与西文字体是分离的，这个要注意。
+\end{explain*}
+\begin{quote}
+  \itshape
+  ctex 宏包及其文档类（如ctexart）另外新定义了一些组合字体，可以让中文拥有如同西文一样使用粗体（\lstinline|\bfseries|）和意大利体（\lstinline|\itshape|）的功能，并且重新定义了 \rmfamily 使他同时对中文其作用。 这样就默认了中文的字体组为rm，正常字体是宋体，粗体是黑体，意大利体是楷体，符合我们平时使用的习惯。
+\end{quote}
+\begin{codeshow}
+  我是一个人(宋体)，
+
+  \textbf{你呢（黑体）？}
+
+  \textit{不是吧，是汪（楷体）！}
+\end{codeshow}
+
+\begin{quote}
+  \itshape
+  中文的字体族，在ctex宏包及其文档类下进行了一部分预定义，在win下配置了四种字体族，并提供了如下的简化命令来进行使用
+\end{quote}
+\begin{codeshow}
+  {\songti 我是宋体},
+
+  {\heiti 我是黑体},
+
+  {\fangsong 我是仿宋},
+
+  {\kaishu 我是楷体}。
+\end{codeshow}
+
+
 \subsection{使用中文}\label{subsec:chinese}
 使用中文需要导入ctex宏包。
 \begin{lstlisting}
@@ -11,20 +59,44 @@
 \end{lstlisting}
 
 \subsection{全局字体设置}\label{subsec:global}
-
+\subsubsection{英文字体设置}
+设置正文罗马字体族，无衬线字体族和打字机字体族
 \begin{lstlisting}
-  \setmainfont{Times New Roman}	%仅对西文起作用，需要fontspec宏包
-  \setCJKmainfont{SimSun}			%仅对中文起作用
+  \setmainfont[可选选项]{字体名}
+  \setsansfont[可选选项]{字体名}
+  \setmonofont[可选选项]{字体名}
+  设置好之后，fontspec会自动找到并匹配相应的粗体，斜体等，令我们使用\bfseries和\itshape也有效,若没有，那需要进行如下的设置。
+  \setmainfont[
+        BoldFont       = texgyrepagella-bold.otf ,
+        ItalicFont     = texgyrepagella-italic.otf ,
+        BoldItalicFont = texgyrepagella-bolditalic.otf ]{texgyrepagella-regular.otf}
+\end{lstlisting}
+
+\subsubsection{中文字体设置}
+\begin{lstlisting}
+  \setCJKmainfont[可选选项]{字体名}
+  \setCJKsansfont[可选选项]{字体名}
+  \setCJKmonofont[可选选项]{字体名}
+  \setCJKfamilyfont{中文字体族}{字体名}
 \end{lstlisting}
 
 \subsection{局部字体设置}\label{subsec:local}
-
+\subsubsection{英文字体设置}
 \begin{lstlisting}
+  \usepackage{fontspec}
+  \newfontfamily\fugu{Luminari-Regular}
+  \newfontfamily\ptmr{PTMono-Regular}
+\end{lstlisting}
+
+\subsubsection{中文字体设置}
+\begin{lstlisting}
+  \newCJKfontfamily\qingsong{FZQKBYSJW--GB1-0}
+  或者
   \setCJKfamilyfont{zhsong}{FZShuSong-Z01}
   \newcommand*{\songti}{\CJKfamily{zhsong}}
 \end{lstlisting}
 
-可以使用\lstinline{\songti}命令来调用宋体字体。
+可以使用\lstinline|\qingsong|或者\lstinline{\songti}命令来调用宋体字体。
 
 \subsection{文字装饰}\label{subsec:decor}
 
