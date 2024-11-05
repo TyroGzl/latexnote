@@ -62,3 +62,33 @@
   \caption{beamer参考文献正常显示}
   \label{fig:beamer-ref1}
 \end{figure}
+
+\subsection{\href{https://cn.overleaf.com/latex/templates/template-for-the-computer-journal-comjnl/xwtyhjrpbtvp}{Template for the Computer Journal (COMJNL)}使用bibtex编译报错}\label{subsec:comjnl-bibtex-error}
+
+\qaq{问题：}使用\href{https://cn.overleaf.com/latex/templates/template-for-the-computer-journal-comjnl/xwtyhjrpbtvp}{Template for the Computer Journal (COMJNL)}模板时，使用\lstinline{bibtex}编译报错，报错信息如下：
+\begin{lstlisting}
+  You can't pop an empty literal stack for entry CAN01
+\end{lstlisting}
+
+\qaq{解决方法}
+\lstinline|compj.bst|文件有错误，将
+\begin{lstlisting}
+  FUNCTION {article}
+  { output.bibitem
+    format.authors "author" output.check
+    http://format.date "year" output.check 
+    format.title "title"  output.check 
+    new.block
+    crossref missing$
+      { journal emphasize "journal" output.check
+        format.vol.num.pages output
+      }
+      { format.article.crossref output.nonnull
+        format.pages output
+      }
+    if$
+    format.note output
+    fin.entry
+  }
+\end{lstlisting}
+中\lstinline| http://format.date "year" output.check |改为\lstinline| format.date "year" output.check |即可。其余文献类型类似。

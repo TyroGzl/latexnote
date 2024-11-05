@@ -176,6 +176,24 @@ tabularx 宏包为我们提供了方便的解决方案。它引入了一个 X �
     \end{center}
 \end{codeshow}
 
+\subsection{单元格旋转}\label{sec:cell-rotate}
+使用\lstinline{\rotatebox}命令可以旋转单元格内容。
+
+\begin{codeshow}
+    \begin{tabular}{|c|c|c|}
+        \hline
+        \rotatebox{90}{A} & B     & C \\
+        \hline
+        D     & \rotatebox{45}{E} & F \\
+        \hline
+        \rotatebox[origin=l]{90}{G} & H     & I \\
+        \hline
+    \end{tabular}
+\end{codeshow}
+
+
+
+
 \section{问题}
 
 \subsection{longtable与arydshln宏包冲突}\label{subsec:longtable-arydshln-conflict}
