@@ -153,3 +153,85 @@ LATEX 支持两种创建选项的方法：键-值系统和“简单文本”方�
 \setlength{\textwidth}{17.5cm}
 \setlength{\textheight}{20cm}
 \end{lstlisting}
+
+\section{用于类和宏包编写者的命令}\label{sec:cls-cmd}
+\subsection{识别}
+\subsubsection{NeedsTeXFormat}
+\begin{lstlisting}
+    \NeedsTeXFormat {⟨format-name⟩} [⟨release-date⟩]
+\end{lstlisting}
+该命令告诉 TEX 应使用名称为 \lstinline|⟨format-name⟩| 的格式处理此文件。您可以使用可选参数 \lstinline|⟨release-date⟩| 进一步指定所需格式的最早发布日期。当格式的发布日期早于指定的日期时，将生成警告。标准的 \lstinline|⟨format-name⟩| 是 LaTeX2e。如果存在日期，则必须采用 yyyy-mm-dd 的形式。
+
+\subsubsection{ProvidesClass和ProvidesPackage}
+\begin{lstlisting}
+    \ProvidesClass {⟨class-name⟩} [⟨release-info⟩]
+    \ProvidesPackage {⟨package-name⟩} [⟨release-info⟩]
+\end{lstlisting}
+此声明当前文件包含文档类 \lstinline|⟨class-name⟩| 或宏包 \lstinline|⟨package-name⟩| 的定义。
+
+可选的 ⟨release-info⟩，如果使用，必须包含：
+\begin{itemize}
+    \item 此版本文件的发布日期，形式为 yyyy-mm-dd；
+    \item 可选地跟着一个空格和一个简短描述，可能包括版本号。
+\end{itemize}
+
+上述语法必须严格遵循，以便 \lstinline|\LoadClass| 或 \lstinline|\documentclass|（对于类）或 \lstinline|\RequirePackage| 或 \lstinline|\usepackage|（对于宏包）测试发布是否太旧。
+
+\subsection{加载文件}
+\subsubsection{LoadClass}
+\begin{lstlisting}
+    \LoadClass [⟨options-list⟩] {⟨class-name⟩} [⟨release-info⟩]
+    \LoadClassWithOptions {⟨class-name⟩} [⟨release-info⟩]
+\end{lstlisting}
+这些命令仅用于类文件中，不能用于宏包文件；在类文件中最多只能使用一次。
+
+使用 \lstinline|\LoadClass| 与使用 \lstinline|\documentclass| 加载类文件相同，示例：
+\begin{lstlisting}
+    \LoadClass{article}[2022-06-01]
+    \LoadClassWithOptions{article}[2022-06-01]
+\end{lstlisting}
+
+\subsubsection{RequirePackage}
+\begin{lstlisting}
+    \RequirePackage [⟨options-list⟩] {⟨package-name⟩} [⟨release-info⟩]
+    \RequirePackageWithOptions {⟨package-name⟩} [⟨release-info⟩]
+\end{lstlisting}
+使用 \lstinline|\RequirePackage| 与作者命令 \lstinline|\usepackage| 相同。示例：
+\begin{lstlisting}
+    \RequirePackage{ifthen}[2022-06-01]
+    \RequirePackageWithOptions{graphics}[2022-06-01]
+\end{lstlisting}
+
+两个带 WithOptions 的版本仅加载具有当前文件（类或宏包）使用的选项的类（或宏包）文件。
+
+\subsection{延迟代码}
+
+\subsection{创建和使用键值选项}
+\begin{lstlisting}
+    \DeclareKeys [⟨family⟩] {⟨declarations⟩}
+\end{lstlisting}
+此命令从逗号分隔的 \lstinline|⟨declarations⟩| 列表中创建一系列选项。列表中的每个条目都是键-值对，其中 ⟨key⟩ 具有一个或多个 \lstinline|⟨properties⟩|。下面介绍了一小部分“基本”的 \lstinline|⟨properties⟩|。
+
+这里提供的基本属性包括：
+\begin{itemize}
+    \item .code — 执行任意代码
+    \item .if — 设置一个 TEX \lstinline|\if|... 开关
+    \item .ifnot — 设置一个反转的 TEX \lstinline|\if|... 开关
+    \item .store — 将值存储到宏中
+    \item .usage – 定义选项是否仅能在加载时使用（load）、在导言区使用
+          （preamble）或在范围上没有限制（general）
+\end{itemize}
+
+在 \lstinline|⟨property⟩| 之前的 \lstinline|⟨key⟩| 部分是 \lstinline|⟨name⟩|，\lstinline|⟨value⟩| 与 \lstinline|⟨property⟩| 一起定义了选项的行为。
+\begin{lstlisting}
+    \DeclareKeys[mypkg]
+    {
+        draft.if                =   @mypkg@draft,
+        draft.usage             =   preamble,
+        name.store              =   \@mypkg@name,
+        name.usage              =   load,
+        second-name.store       =   \@mypkg@other@name
+    }
+\end{lstlisting}
+
+上述代码将创建三个选项。选项 \lstinline|draft| 可以在导言区的任何位置给出，并将设置一个名为 \lstinline|\if@mypkg@draft| 的开关。选项 \lstinline|name| 只能在加载宏包时给出，并将保存给定的任何值到 \lstinline|\@mypkg@name| 中。最后，选项 \lstinline|second-name| 可以在任何位置给出，并将其值保存到 \lstinline|\@mypkg@other@name| 中。
