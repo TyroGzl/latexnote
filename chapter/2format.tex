@@ -98,24 +98,6 @@ LaTeX 默认预定义的三种字体族为：罗马字体族，无衬线字体�
 
 可以使用\lstinline|\qingsong|或者\lstinline{\songti}命令来调用宋体字体。
 
-\subsection{文字装饰}\label{subsec:decor}
-
-\LaTeX{} 提供\lstinline{\underline}命令设置下划线。
-
-\begin{codeshow}
-  \underline{underlined text}
-\end{codeshow}
-
-\lstinline{\underline}命令提供的下划线样式不够灵活，ulem或CJKfntef宏包提供了更灵活的下划线命令，CJKfntef宏包对中文支持更好。
-
-\begin{codeshow}
-  \CJKunderdot{important 非常重要}\\
-  \CJKunderline{notice 注意}\\
-  \CJKunderdblline{urgent 必须}\\
-  \CJKunderwave{prompt 提示}\\
-  \CJKsout{wrong 错误}\\
-  \CJKxout{removed 删除}
-\end{codeshow}
 
 \section{分栏}\label{sec:columns}
 

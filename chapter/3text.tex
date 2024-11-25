@@ -299,3 +299,46 @@
 }
 \makeatother
 \end{lstlisting}
+
+\section{标点}\label{sec:punctuations}
+\subsection{引号}
+英文左单引号是\lstinline|`|，右单引号是\lstinline|'|，左双引号是\lstinline|``|，右双引号是\lstinline|''|。
+
+英文下的引号嵌套需要借助\lstinline|\thinspace|命令分隔，比如：
+
+\begin{codeshow}
+    ``\thinspace`Max' is here.''
+
+    ```Max' is here.
+\end{codeshow}
+
+中文下的单引号和双引号可以用中文输入法直接输入。
+
+\subsection{破折，短横}
+英文的短横分为三种：
+\begin{itemize}
+    \item 连字符：输入一个短横：\lstinline|-|，效果如 daughter-in-law
+    \item 数字起止符：输入两个短横：\lstinline|--|，效果如：page 1--2
+    \item 破折号：输入三个短横：\lstinline|---|，效果如：Listen—I’m serious.
+\end{itemize}
+
+中文的破折号可以直接使用日常的输入方式。
+
+\subsection{下划线与删除线}\label{subsec:decor}
+
+\LaTeX{} 提供\lstinline{\underline}命令设置下划线。
+
+\begin{codeshow}
+  \underline{underlined text}
+\end{codeshow}
+
+\lstinline{\underline}命令提供的下划线样式不够灵活，ulem或CJKfntef宏包提供了更灵活的下划线命令，CJKfntef宏包对中文支持更好。
+
+\begin{codeshow}
+  \CJKunderdot{important 非常重要}\\
+  \CJKunderline{notice 注意}\\
+  \CJKunderdblline{urgent 必须}\\
+  \CJKunderwave{prompt 提示}\\
+  \CJKsout{wrong 错误}\\
+  \CJKxout{removed 删除}
+\end{codeshow}
