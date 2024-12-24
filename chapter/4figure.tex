@@ -67,3 +67,34 @@
 \end{lstlisting}
 
 参数htbp表示浮动体的位置，h表示插入此处、t表示在页面上端，b表示在页面下端、p表示允许浮动体单开一页。
+
+\section{问题}
+\subsection{\lstinline{subcaption}修改标题}\label{subsec:figure-subcaption}
+\qaq{问题：}加载\lstinline|subcaption|宏包后，会修改caption设置的标题格式。
+
+\qaq{解决方法：}参考\href{https://tex.stackexchange.com/questions/154435/ieee-template-and-caption-false-option-for-subcaption-package}{IEEE template and \lstinline{caption=false} option for subcaption package?}
+\begin{lstlisting}
+\makeatletter
+\let\MYcaption\@makecaption
+\makeatother
+
+\usepackage{subcaption}
+
+\makeatletter
+\let\@makecaption\MYcaption
+\makeatother
+\end{lstlisting}
+
+\subsection{\lstinline{IEEE Access}模板与tikz宏包冲突}\label{subsec:figure-ieeeaccess}
+\qaq{问题：}使用\lstinline{IEEE Access}模板时，如果导入\lstinline{tikz}宏包会导致编译失败。
+
+\qaq{解决方法：}参考\href{https://www.cnblogs.com/greatestchen/p/17006317.html}{解决Overleaf 中 IEEE Access 模板与 Tikz 包的冲突}
+
+在 \lstinline|ieeeaccess.cls| 文件 中，将 \lstinline|\def\year| 改成 \lstinline|\def\Year|
+
+在 \lstinline|access.tex| 文件 中，将下列语句加在 \lstinline|\usepackage{tikz}| 后面：
+\begin{lstlisting}
+    \NewSpotColorSpace{PANTONE}
+    \AddSpotColor{PANTONE} {PANTONE3015C} {PANTONE\SpotSpace 3015\SpotSpace C} {1 0.3 0 0.2}
+    \SetPageColorSpace{PANTONE}
+\end{lstlisting}  
