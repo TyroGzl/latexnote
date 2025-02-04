@@ -182,11 +182,11 @@ tabularx 宏包为我们提供了方便的解决方案。它引入了一个 X �
 \begin{codeshow}
     \begin{tabular}{|c|c|c|}
         \hline
-        \rotatebox{90}{A} & B     & C \\
+        \rotatebox{90}{A}           & B                 & C \\
         \hline
-        D     & \rotatebox{45}{E} & F \\
+        D                           & \rotatebox{45}{E} & F \\
         \hline
-        \rotatebox[origin=l]{90}{G} & H     & I \\
+        \rotatebox[origin=l]{90}{G} & H                 & I \\
         \hline
     \end{tabular}
 \end{codeshow}
@@ -226,3 +226,84 @@ tabularx 宏包为我们提供了方便的解决方案。它引入了一个 X �
 \begin{lstlisting}
 \renewcommand{\multirowsetup}{\centering}
 \end{lstlisting}
+
+\subsection{\lstinline|cline|命令在\lstinline|colortbl|宏包中被遮盖}\label{subsec:cline-colortbl-error}
+\qaq{问题：}使用\lstinline{colortbl}宏包，\lstinline{\cline}命令在表格中被遮盖，导致表格线不显示。如图\ref{fig:cline-colortbl-error}所示。
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=0.4\textwidth]{figure/chap-tab/cline-colortbl-error.png}
+    \caption{{cline}命令在{colortbl}宏包中被遮盖}
+    \label{fig:cline-colortbl-error}
+\end{figure}
+
+MWE如下：
+\begin{lstlisting}
+\documentclass[a4paper,12pt]{article}
+
+\usepackage{multirow}
+\usepackage{array}
+\usepackage[table]{xcolor}  % 用于淡灰色背景
+\usepackage{hhline}
+
+\begin{document}
+
+\begin{tabular}{ccccc}
+    \hline
+    \rowcolor{gray!40}\multicolumn{5}{c}{Title}                         \\
+    \hline
+    \rowcolor{gray!30}\multicolumn{5}{c}{General}                       \\
+    \hline
+    \rowcolor{gray!10}                      & col1 & col2 & col3 & col4 \\
+    \cline{2-5}
+    \rowcolor{gray!10}                      & col1 & col2 & col3 & col4 \\
+    \cline{2-5}
+    \rowcolor{gray!10}                      & col1 & col2 & col3 & col4 \\
+    \cline{2-5}
+    \rowcolor{gray!10}                      & col1 & col2 & col3 & col4 \\
+    \cline{2-5}
+    \rowcolor{gray!10}\multirow{-5}{*}{row} & col1 & col2 & col3 & col4 \\
+    \hline
+\end{tabular}
+
+\end{document}
+\end{lstlisting}
+
+\qaq{解决方法：}使用\lstinline|hhline|宏包中的\lstinline|\hhline|命令代替\lstinline|\cline|命令，如图\ref{fig:cline-colortbl-sol}所示。
+\begin{lstlisting}
+    \documentclass[a4paper,12pt]{article}
+
+\usepackage{multirow}
+\usepackage{array}
+\usepackage[table]{xcolor}  % 用于淡灰色背景
+\usepackage{hhline}
+
+\begin{document}
+
+\begin{tabular}{ccccc}
+    \hline
+    \rowcolor{gray!40}\multicolumn{5}{c}{Title}                         \\
+    \hline
+    \rowcolor{gray!30}\multicolumn{5}{c}{General}                       \\
+    \hline
+    \rowcolor{gray!10}                      & col1 & col2 & col3 & col4 \\
+    \hhline{*1{>{\arrayrulecolor{gray!10}}-}>{\arrayrulecolor{black}}|*4{-}|}
+    \rowcolor{gray!10}                      & col1 & col2 & col3 & col4 \\
+    \hhline{*1{>{\arrayrulecolor{gray!10}}-}>{\arrayrulecolor{black}}|*4{-}|}
+    \rowcolor{gray!10}                      & col1 & col2 & col3 & col4 \\
+    \hhline{*1{>{\arrayrulecolor{gray!10}}-}>{\arrayrulecolor{black}}|*4{-}|}
+    \rowcolor{gray!10}                      & col1 & col2 & col3 & col4 \\
+    \hhline{*1{>{\arrayrulecolor{gray!10}}-}>{\arrayrulecolor{black}}|*4{-}|}
+    \rowcolor{gray!10}\multirow{-5}{*}{row} & col1 & col2 & col3 & col4 \\
+    \hline
+\end{tabular}
+
+\end{document}
+\end{lstlisting}
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=0.4\textwidth]{figure/chap-tab/cline-colortbl-sol.png}
+    \caption{{hhline}命令在{colortbl}宏包中正常显示}
+    \label{fig:cline-colortbl-sol}
+\end{figure}
