@@ -307,3 +307,29 @@ MWE如下：
     \caption{{hhline}命令在{colortbl}宏包中正常显示}
     \label{fig:cline-colortbl-sol}
 \end{figure}
+
+\subsection{\lstinline|tabularx|表格垂直居中}\label{subsec:tabularx-center}
+
+\qaq{问题：}使用\lstinline{tabularx}宏包，表格内容顶部居中
+
+\begin{codeshow}
+    \begin{tabularx}{0.3\textwidth}{|X|X|}
+        \hline
+        text & this is a long text long 
+        text long text long text long text\\
+        \hline
+    \end{tabularx}
+\end{codeshow}
+
+
+\qaq{解决方法：}添加命令\lstinline|\def\tabularxcolumn#1{m{#1}}|，需要导入\lstinline{array}宏包。
+
+\begin{codeshow}
+    \def\tabularxcolumn#1{m{#1}}
+    \begin{tabularx}{0.3\textwidth}{|X|X|}
+        \hline
+        text & this is a long text long 
+        text long text long text long text\\
+        \hline
+    \end{tabularx}
+\end{codeshow}
